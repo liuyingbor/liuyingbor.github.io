@@ -3,11 +3,11 @@
   <title>狼唤</title>
   
   
-  <link href="http://liuyingbo.com/atom.xml" rel="self"/>
+  <link href="https://liuyingbo.com/atom.xml" rel="self"/>
   
-  <link href="http://liuyingbo.com/"/>
+  <link href="https://liuyingbo.com/"/>
   <updated>2022-11-05T20:53:18.137Z</updated>
-  <id>http://liuyingbo.com/</id>
+  <id>https://liuyingbo.com/</id>
   
   <author>
     <name>刘英博</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>备忘录</title>
-    <link href="http://liuyingbo.com/post/4067e4b.html"/>
-    <id>http://liuyingbo.com/post/4067e4b.html</id>
+    <link href="https://liuyingbo.com/post/4067e4b.html"/>
+    <id>https://liuyingbo.com/post/4067e4b.html</id>
     <published>2021-12-02T14:21:37.000Z</published>
     <updated>2022-11-05T20:53:18.137Z</updated>
     
@@ -34,9 +34,9 @@
     
     
     
-    <category term="常用" scheme="http://liuyingbo.com/tags/%E5%B8%B8%E7%94%A8/"/>
+    <category term="常用" scheme="https://liuyingbo.com/tags/%E5%B8%B8%E7%94%A8/"/>
     
-    <category term="记录" scheme="http://liuyingbo.com/tags/%E8%AE%B0%E5%BD%95/"/>
+    <category term="记录" scheme="https://liuyingbo.com/tags/%E8%AE%B0%E5%BD%95/"/>
     
   </entry>
   
