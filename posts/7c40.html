@@ -1,0 +1,197 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>Unity-性能优化 | 狼唤</title><meta name="author" content="刘英博"><meta name="copyright" content="刘英博"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="资源优化Unity资源检测（Asset Checker）工具用于本地资源检测，帮助开发者尽早发现资源文件中存在的问题  支持所有版本的Unity项目 不依赖Unity Editor，无需安装绿色运行 检测速度极快，可在UPR中查阅检测结果 支持命令行模式，可与CI&#x2F;CD工具轻松集成，实现自动化检测 规则库持续更新 支持AssetBundle冗余检测 支持静态代码分析 Asset Checker 官"><meta property="og:type" content="article"><meta property="og:title" content="Unity-性能优化"><meta property="og:url" content="https://liuyingbo.com/posts/7c40.html"><meta property="og:site_name" content="狼唤"><meta property="og:description" content="资源优化Unity资源检测（Asset Checker）工具用于本地资源检测，帮助开发者尽早发现资源文件中存在的问题  支持所有版本的Unity项目 不依赖Unity Editor，无需安装绿色运行 检测速度极快，可在UPR中查阅检测结果 支持命令行模式，可与CI&#x2F;CD工具轻松集成，实现自动化检测 规则库持续更新 支持AssetBundle冗余检测 支持静态代码分析 Asset Checker 官"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog-1308267163.cos.ap-shanghai.myqcloud.com/imgs/202303052044934.jpg"><meta property="article:published_time" content="2023-03-05T21:31:20.000Z"><meta property="article:modified_time" content="2023-03-05T13:48:42.429Z"><meta property="article:author" content="刘英博"><meta property="article:tag" content="Unity"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://blog-1308267163.cos.ap-shanghai.myqcloud.com/imgs/202303052044934.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://liuyingbo.com/posts/7c40"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="//busuanzi.ibruce.info"><link rel="manifest" href="/manifest.json"><meta name="msapplication-TileColor" content="#3b70fc"><link rel="apple-touch-icon" sizes="180x180" href="/img/siteicon/128.png"><link rel="icon" type="image/png" sizes="32x32" href="/img/siteicon/32.png"><link rel="icon" type="image/png" sizes="16x16" href="/img/siteicon/16.png"><link rel="mask-icon" href="/img/siteicon/128.png" color="#5bbad5"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload='this.media="all"'><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload='this.media="all"'><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE={title:"Unity-性能优化",isPost:!0,isHome:!1,isHighlightShrink:!1,isToc:!0,postUpdate:"2023-03-05 13:48:42"}</script><noscript><style>#nav{opacity:1}.justified-gallery img{opacity:1}#post-meta time,#recent-posts time{display:inline!important}</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="css/color.css"><link rel="stylesheet" href="/css/custom.css" media="defer" onload='this.media="all"'><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload='this.media="screen"'><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload='this.media="all"'><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload='this.media="all"'><script src="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="狼唤" type="application/atom+xml"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://blog-1308267163.cos.ap-shanghai.myqcloud.com/imgs/202211100000064.JPG" onerror='onerror=null,src="/img/friend_404.gif"' alt="avatar"></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><hr><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i> <span>首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i> <span>时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-comment-dots"></i> <span>标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i> <span>分类</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i> <span>留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image:url(https://blog-1308267163.cos.ap-shanghai.myqcloud.com/imgs/202303052044934.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">狼唤</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i> <span>搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i> <span>首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i> <span>时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-comment-dots"></i> <span>标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i> <span>分类</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i> <span>留言板</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Unity-性能优化</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-05T21:31:20.000Z" title="发表于 2023-03-05 21:31:20">2023-03-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-05T13:48:42.429Z" title="更新于 2023-03-05 13:48:42">2023-03-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Unity/">Unity</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" data-flag-title="Unity-性能优化"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="资源优化"><a href="#资源优化" class="headerlink" title="资源优化"></a>资源优化</h2><h3 id="Unity资源检测（Asset-Checker）工具"><a href="#Unity资源检测（Asset-Checker）工具" class="headerlink" title="Unity资源检测（Asset Checker）工具"></a>Unity资源检测（Asset Checker）工具</h3><p><strong>用于本地资源检测，帮助开发者尽早发现资源文件中存在的问题</strong></p><ul><li>支持所有版本的Unity项目</li><li>不依赖Unity Editor，无需安装绿色运行</li><li>检测速度极快，可在UPR中查阅检测结果</li><li>支持命令行模式，可与CI/CD工具轻松集成，实现自动化检测</li><li>规则库持续更新</li><li>支持AssetBundle冗余检测</li><li>支持静态代码分析<br><a target="_blank" rel="noopener" href="https://upr.unity.cn/instructions/assetchecker#UserManual">Asset Checker 官方教程地址（包含工具下载地址）</a></li></ul><h3 id="Audio导入设置检查与优化"><a href="#Audio导入设置检查与优化" class="headerlink" title="Audio导入设置检查与优化"></a>Audio导入设置检查与优化</h3><p><img src="https://blog-1308267163.cos.ap-shanghai.myqcloud.com/imgs/202303052135123.png" alt="image-20230305213552090"></p><p>根据平台选择合理的音频设置，原始音频资源尽量采用未压缩WAV格式</p><p>移动平台对音乐音效统一采用单通道设置（Force to Mono）,并将音乐采样频率设置为22050Hz</p><p>一般勾选了强制单声道之后也要勾选Normalize选项，这样引擎内部会选择最合适的方式来强行转换单声道。</p><p>移动平台大多数声音尽量采用Vorbis压缩设置，IOS平台或不打算循环的声音可以选择MP3格式，对于简短、常用的音效，可以采用解码速度快的ADPCM格式（PCM为未压缩格式）</p><p>音频片段加载类型说明</p><ul><li>简短音效导入后小于200kb，采用Decompress on Load模式</li><li>对于复杂音效，大小大于200kb，长度超过5秒的音效采用Compressed In Memory模式</li><li>对于长度较长的音效或背景音乐则采用Streaming模式，虽然会有CPU额外开销，但节省内存并且加载不卡顿</li></ul><p>当实现静音功能时，不要简单的将音量设置为0，应销毁音频（AudioSource）组件，将音频从内存中卸载。</p><h4 id="优化前后真机对比（Android）"><a href="#优化前后真机对比（Android）" class="headerlink" title="优化前后真机对比（Android）"></a>优化前后真机对比（Android）</h4><p>Apk包体由原来的560.7M下降到544.6M</p><p>Audio部分的内存由76.1M下降到6.9M</p><p>CPU开销由2.5%左右上升到5%左右，这是由于部分音频资源才用了Streaming模式加载</p><p><a target="_blank" rel="noopener" href="https://github.com/lwwhb/Unity2022_SUNTAIL_Stylized_Fantasy_Village_Optimization/blob/main/Documents/Pics/1.png"><img src="https://blog-1308267163.cos.ap-shanghai.myqcloud.com/imgs/202303052134075.png" alt="第壹节 Audio导入设置检查与优化"></a></p><h3 id="Model导入设置检查与优化"><a href="#Model导入设置检查与优化" class="headerlink" title="Model导入设置检查与优化"></a>Model导入设置检查与优化</h3><h4 id="DCC中模型导出"><a href="#DCC中模型导出" class="headerlink" title="DCC中模型导出"></a>DCC中模型导出</h4><p>Unity 支持多种标准和专有模型文件格式（DCC）。Unity 内部使用 .fbx 文件格式作为其导入链。最佳做法尽可能使用 .fbx 文件格式，并且不应在生产中使用专有文件格式。</p><p>优化原始导入模型文件，删除不需要的数据</p><ul><li>统一单位</li><li>导出的网格必须是多边形拓扑网格，不能是贝塞尔曲线、样条曲线、NURBS、NURMS、细分曲面等</li><li>烘培Deformers,在导出之前，确保变形体被烘培到网格模型上，如骨骼形变烘培到蒙皮权重上</li><li>不建议模型使用到的纹理随模型导出</li><li>如果你需要导入blend shape normals，必须要指定光滑组smooth groups</li><li>DCC导出面板设置, 不建议携带场景信息导出，如不建议导出摄像机、灯光、材质等信息，因为这些的信息与Unity内默认都不同。除非你自己为某DCC做过自定义导出插件。</li></ul><h4 id="Unity模型导入流程"><a href="#Unity模型导入流程" class="headerlink" title="Unity模型导入流程"></a>Unity模型导入流程</h4><p><a target="_blank" rel="noopener" href="https://github.com/lwwhb/Unity2022_SUNTAIL_Stylized_Fantasy_Village_Optimization/blob/main/Documents/Pics/2.png"><img src="https://github.com/lwwhb/Unity2022_SUNTAIL_Stylized_Fantasy_Village_Optimization/raw/main/Documents/Pics/2.png" alt="2"></a></p><h4 id="原始模型文件对性能的影响点"><a href="#原始模型文件对性能的影响点" class="headerlink" title="原始模型文件对性能的影响点"></a>原始模型文件对性能的影响点</h4><ul><li>最小化面数，不要使用微三角形，分布尽量均匀</li><li>合理的网络拓扑和平滑组</li><li>尽量少的使用材质个数</li><li>尽可能少的使用蒙皮网格</li><li>尽可能少的骨骼数量</li><li>FK与IK节点没分离，IK节点没删除</li></ul><h4 id="模型优化"><a href="#模型优化" class="headerlink" title="模型优化"></a>模型优化</h4><ul><li>尽可能的将网格合并到一起，（）</li><li>尽可能使用共享材质</li><li>不要使用网格碰撞体</li><li>不必要不要开启网格读写</li><li>使用合理的LOD级别</li><li>Skin Weights受骨骼影响个过多</li><li>合理压缩网格</li><li>不需要rigs和BlendShapes尽量关闭</li><li>如果可能，禁用法线或切线</li><li>多套模型</li></ul><h4 id="资源检查报告——FBX部分问题解读"><a href="#资源检查报告——FBX部分问题解读" class="headerlink" title="资源检查报告——FBX部分问题解读"></a><strong>资源检查报告——FBX部分问题解读</strong></h4><ul><li>其中两项建议与模型动画有关，而测试项目中所有模型资源都不涉及动画，可以将Rig标签下的Animation Type设置为None，并关闭Animation标签下的Import Animations选项，设置Materials标签中的Material Creation Mode为None.</li><li>开启Project Settings——&gt;Player——&gt;Optimization下的Vertex Compression与Optimize Mesh Data选项</li></ul><p>优化成果</p><ul><li>包体大小前后没变化，依然是544.6M</li><li>运行时模型内存优化前为422.9M，优化后为400.5M，相差的22M来自于运行时CombinedMesh开销的节省。后期运行时模型资源优化才是我们的重点。</li></ul></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者:</span> <span class="post-copyright-info"><a href="https://liuyingbo.com">刘英博</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接:</span> <span class="post-copyright-info"><a href="https://liuyingbo.com/posts/7c40.html">https://liuyingbo.com/posts/7c40.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明:</span> <span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://liuyingbo.com" target="_blank">狼唤</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Unity/">Unity</a></div><div class="post_share"><div class="social-share" data-image="https://blog-1308267163.cos.ap-shanghai.myqcloud.com/imgs/202303052044934.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload='this.media="all"'><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/posts/66fe.html"><img class="next-cover" src="https://blog-1308267163.cos.ap-shanghai.myqcloud.com/imgs/202303052044934.jpg" onerror='onerror=null,src="/img/404.jpg"' alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Unity-移动端打包记录（持续更新）</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/9fa0374.html" title="Unity-Shader"><img class="cover" src="https://blog-1308267163.cos.ap-shanghai.myqcloud.com/imgs/202211192022487.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-06</div><div class="title">Unity-Shader</div></div></a></div><div><a href="/posts/undefined.html" title="Unity-全局屏幕点击特效"><img class="cover" src="https://blog-1308267163.cos.ap-shanghai.myqcloud.com/imgs/202211192048985.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-14</div><div class="title">Unity-全局屏幕点击特效</div></div></a></div><div><a href="/posts/b6d0915c.html" title="Unity-底层原理"><img class="cover" src="https://blog-1308267163.cos.ap-shanghai.myqcloud.com/imgs/202211192048985.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-12</div><div class="title">Unity-底层原理</div></div></a></div><div><a href="/posts/6739242f.html" title="Unity-简易对象池"><img class="cover" src="https://blog-1308267163.cos.ap-shanghai.myqcloud.com/imgs/202211192048985.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-01</div><div class="title">Unity-简易对象池</div></div></a></div><div><a href="/posts/cffbee7c.html" title="Unity-编辑器扩展"><img class="cover" src="https://blog-1308267163.cos.ap-shanghai.myqcloud.com/imgs/202211192048985.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-01-29</div><div class="title">Unity-编辑器扩展</div></div></a></div><div><a href="/posts/ba9e7782.html" title="Unity-网络开发（三）"><img class="cover" src="https://blog-1308267163.cos.ap-shanghai.myqcloud.com/imgs/202211192048985.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-08-14</div><div class="title">Unity-网络开发（三）</div></div></a></div></div></div><hr><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i> <span>评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://blog-1308267163.cos.ap-shanghai.myqcloud.com/imgs/202211100000064.JPG" onerror='this.onerror=null,this.src="/img/friend_404.gif"' alt="avatar"></div><div class="author-info__name">刘英博</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon faa-parent animated-hover" href="https://github.com/liuyingbor" target="_blank" title="Github"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-gitHub"></use></svg></a><a class="social-icon faa-parent animated-hover" href="https://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=liuyingbo666@qq.com" target="_blank" title="Email"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-youxiang"></use></svg></a><a class="social-icon faa-parent animated-hover" href="https://space.bilibili.com/11929004" target="_blank" title="BiliBili"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-bilibili"></use></svg></a><a class="social-icon faa-parent animated-hover" href="tencent://Message/?Uin=594686596&amp;amp;websiteName=local.edu.com:8888=&amp;amp;Menu=yes" target="_blank" title="QQ"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-QQ1"></use></svg></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E4%BC%98%E5%8C%96"><span class="toc-number">1.</span> <span class="toc-text">资源优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Unity%E8%B5%84%E6%BA%90%E6%A3%80%E6%B5%8B%EF%BC%88Asset-Checker%EF%BC%89%E5%B7%A5%E5%85%B7"><span class="toc-number">1.1.</span> <span class="toc-text">Unity资源检测（Asset Checker）工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Audio%E5%AF%BC%E5%85%A5%E8%AE%BE%E7%BD%AE%E6%A3%80%E6%9F%A5%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="toc-number">1.2.</span> <span class="toc-text">Audio导入设置检查与优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E5%89%8D%E5%90%8E%E7%9C%9F%E6%9C%BA%E5%AF%B9%E6%AF%94%EF%BC%88Android%EF%BC%89"><span class="toc-number">1.2.1.</span> <span class="toc-text">优化前后真机对比（Android）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Model%E5%AF%BC%E5%85%A5%E8%AE%BE%E7%BD%AE%E6%A3%80%E6%9F%A5%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="toc-number">1.3.</span> <span class="toc-text">Model导入设置检查与优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#DCC%E4%B8%AD%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%87%BA"><span class="toc-number">1.3.1.</span> <span class="toc-text">DCC中模型导出</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Unity%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%85%A5%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.2.</span> <span class="toc-text">Unity模型导入流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E5%A7%8B%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6%E5%AF%B9%E6%80%A7%E8%83%BD%E7%9A%84%E5%BD%B1%E5%93%8D%E7%82%B9"><span class="toc-number">1.3.3.</span> <span class="toc-text">原始模型文件对性能的影响点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E4%BC%98%E5%8C%96"><span class="toc-number">1.3.4.</span> <span class="toc-text">模型优化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E6%A3%80%E6%9F%A5%E6%8A%A5%E5%91%8A%E2%80%94%E2%80%94FBX%E9%83%A8%E5%88%86%E9%97%AE%E9%A2%98%E8%A7%A3%E8%AF%BB"><span class="toc-number">1.3.5.</span> <span class="toc-text">资源检查报告——FBX部分问题解读</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/7c40.html" title="Unity-性能优化"><img src="https://blog-1308267163.cos.ap-shanghai.myqcloud.com/imgs/202303052044934.jpg" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="Unity-性能优化"></a><div class="content"><a class="title" href="/posts/7c40.html" title="Unity-性能优化">Unity-性能优化</a><time datetime="2023-03-05T21:31:20.000Z" title="发表于 2023-03-05 21:31:20">2023-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/66fe.html" title="Unity-移动端打包记录（持续更新）"><img src="https://blog-1308267163.cos.ap-shanghai.myqcloud.com/imgs/202303052044934.jpg" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="Unity-移动端打包记录（持续更新）"></a><div class="content"><a class="title" href="/posts/66fe.html" title="Unity-移动端打包记录（持续更新）">Unity-移动端打包记录（持续更新）</a><time datetime="2023-03-05T20:34:23.000Z" title="发表于 2023-03-05 20:34:23">2023-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/29f6.html" title="Unity-移动端屏幕适配"><img src="https://blog-1308267163.cos.ap-shanghai.myqcloud.com/imgs/202211242151718.jpg" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="Unity-移动端屏幕适配"></a><div class="content"><a class="title" href="/posts/29f6.html" title="Unity-移动端屏幕适配">Unity-移动端屏幕适配</a><time datetime="2023-03-05T13:48:42.433Z" title="发表于 2023-03-05 13:48:42">2023-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/4ac7.html" title="C# LINQ"><img src="https://blog-1308267163.cos.ap-shanghai.myqcloud.com/imgs/202211191917907.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="C# LINQ"></a><div class="content"><a class="title" href="/posts/4ac7.html" title="C# LINQ">C# LINQ</a><time datetime="2022-11-24T22:49:16.000Z" title="发表于 2022-11-24 22:49:16">2022-11-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/fff1.html" title="Unity-移动平台相关Java语法"><img src="https://blog-1308267163.cos.ap-shanghai.myqcloud.com/imgs/202211242151718.jpg" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="Unity-移动平台相关Java语法"></a><div class="content"><a class="title" href="/posts/fff1.html" title="Unity-移动平台相关Java语法">Unity-移动平台相关Java语法</a><time datetime="2022-11-24T21:56:45.000Z" title="发表于 2022-11-24 21:56:45">2022-11-24</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By 刘英博</div><div class="framework-info"><span>框架</span> <a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题</span> <a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i> <span>数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"></div></div><hr><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>(()=>{
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo.liuyingbo.com/',
+      region: '',
+      onCommentLoaded: function () {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      }
+    }, null))
+  }
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.liuyingbo.com/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      countELement.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const runFn = () => {
+    init()
+    
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') {
+      setTimeout(runFn,0)
+      return
+    } 
+    getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(runFn)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !true) {
+    if (true) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script src="/js/title.js"></script><div class="aplayer no-destroy" data-id="1708664797" data-server="tencent" data-type="playlist" data-order="list" data-fixed="true" data-preload="auto" data-autoplay="false" data-mutex="true"></div><script data-pjax src="//npm.elemecdn.com/pace-js@1.2.4/pace.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload='this.media="all"'><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><div class="app-refresh" id="app-refresh" style="position:fixed;top:-2.2rem;left:0;right:0;z-index:99999;padding:0 1rem;font-size:15px;height:2.2rem;transition:all .3s ease"><div class="app-refresh-wrap" style="display:flex;color:#fff;height:100%;align-items:center;justify-content:center"><label>✨ 有新文章啦！ 👉</label><a href="javascript:void(0)" onclick="location.reload()"><span style="color:#fff;text-decoration:underline;cursor:pointer">🍗点击食用🍔</span></a></div></div><script>if ('serviceWorker' in navigator) {
+if (navigator.serviceWorker.controller) {
+navigator.serviceWorker.addEventListener('controllerchange', function() {
+showNotification()
+})
+}
+window.addEventListener('load', function() {
+navigator.serviceWorker.register('/sw.js')
+})
+}
+function showNotification() {
+if (GLOBAL_CONFIG.Snackbar) {
+var snackbarBg =
+document.documentElement.getAttribute('data-theme') === 'light' ?
+GLOBAL_CONFIG.Snackbar.bgLight :
+GLOBAL_CONFIG.Snackbar.bgDark
+var snackbarPos = GLOBAL_CONFIG.Snackbar.position
+Snackbar.show({
+text: '✨ 有新文章啦！ 👉',
+backgroundColor: snackbarBg,
+duration: 500000,
+pos: snackbarPos,
+actionText: '🍗点击食用🍔',
+actionTextColor: '#fff',
+onActionClick: function(e) {
+location.reload()
+},
+})
+} else {
+var showBg =
+document.documentElement.getAttribute('data-theme') === 'light' ?
+'#3b70fc' :
+'#1f1f1f'
+var cssText = `top: 0; background: ${showBg};`
+document.getElementById('app-refresh').style.cssText = cssText
+}
+}</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><div class="js-pjax"><script async>for(var arr=document.getElementsByClassName("recent-post-item"),i=0;i<arr.length;i++)arr[i].classList.add("wow"),arr[i].classList.add("animate__zoomIn"),arr[i].setAttribute("data-wow-duration","1.5s"),arr[i].setAttribute("data-wow-delay","200ms"),arr[i].setAttribute("data-wow-offset","30"),arr[i].setAttribute("data-wow-iteration","1")</script><script async>for(var arr=document.getElementsByClassName("card-widget"),i=0;i<arr.length;i++)arr[i].classList.add("wow"),arr[i].classList.add("animate__zoomIn"),arr[i].setAttribute("data-wow-duration",""),arr[i].setAttribute("data-wow-delay","200ms"),arr[i].setAttribute("data-wow-offset",""),arr[i].setAttribute("data-wow-iteration","")</script><script async>for(var arr=document.getElementsByClassName("flink-list-card"),i=0;i<arr.length;i++)arr[i].classList.add("wow"),arr[i].classList.add("animate__flipInY"),arr[i].setAttribute("data-wow-duration","3s"),arr[i].setAttribute("data-wow-delay",""),arr[i].setAttribute("data-wow-offset",""),arr[i].setAttribute("data-wow-iteration","")</script><script async>for(var arr=document.getElementsByClassName("flink-list-card"),i=0;i<arr.length;i++)arr[i].classList.add("wow"),arr[i].classList.add("animate__animated"),arr[i].setAttribute("data-wow-duration","3s"),arr[i].setAttribute("data-wow-delay",""),arr[i].setAttribute("data-wow-offset",""),arr[i].setAttribute("data-wow-iteration","")</script><script async>for(var arr=document.getElementsByClassName("article-sort-item"),i=0;i<arr.length;i++)arr[i].classList.add("wow"),arr[i].classList.add("animate__slideInRight"),arr[i].setAttribute("data-wow-duration","1.5s"),arr[i].setAttribute("data-wow-delay",""),arr[i].setAttribute("data-wow-offset",""),arr[i].setAttribute("data-wow-iteration","")</script><script async>for(var arr=document.getElementsByClassName("site-card"),i=0;i<arr.length;i++)arr[i].classList.add("wow"),arr[i].classList.add("animate__flipInY"),arr[i].setAttribute("data-wow-duration","3s"),arr[i].setAttribute("data-wow-delay",""),arr[i].setAttribute("data-wow-offset",""),arr[i].setAttribute("data-wow-iteration","")</script><script async>for(var arr=document.getElementsByClassName("site-card"),i=0;i<arr.length;i++)arr[i].classList.add("wow"),arr[i].classList.add("animate__animated"),arr[i].setAttribute("data-wow-duration","3s"),arr[i].setAttribute("data-wow-delay",""),arr[i].setAttribute("data-wow-offset",""),arr[i].setAttribute("data-wow-iteration","")</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script><script async src="/js/ali_font.js"></script></body></html>
